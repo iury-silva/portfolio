@@ -1,15 +1,14 @@
 <template>
   <v-app>
     <v-main class="back primary">
-      <router-view/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
 
   data: () => ({
     //
@@ -17,11 +16,11 @@ export default {
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
 * {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   background-color: rgb(144, 144, 144);
   width: 10px;
 }
@@ -70,4 +69,3 @@ html {
   }
 }
 </style>
-
