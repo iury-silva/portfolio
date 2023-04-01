@@ -1,24 +1,78 @@
 <template>
   <v-container class="nav primary" fluid>
-    <v-btn icon class="text-nav2" @click="setDark()">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
+    <v-row>
+      <v-btn icon class="text-nav2" @click="setDark()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path :d="iconMode" :fill="iconColor" />
+        </svg>
+      </v-btn>
+      <v-menu
+        offset-y
+        origin="center center"
+        rounded
+        transition="scale-transition"
       >
-        <path fill="none" d="M0 0h24v24H0z" />
-        <path :d="iconMode" :fill="iconColor" />
-      </svg>
-    </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text v-bind="attrs" v-on="on" class="text-nav3">
+            {{ $t("locale") }}
+            <v-img
+              :src="require(`@/assets/${$t('flag-icon')}`)"
+              contain
+              max-width="29"
+              max-height="29"
+              class="ml-4"
+            >
+            </v-img>
+          </v-btn>
+        </template>
+
+        <v-list dense>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              @click="setLocale(item.value)"
+            >
+              <v-list-item-title class="body-1 mr-4">{{
+                item.title
+              }}</v-list-item-title>
+              <v-img
+                :src="require(`@/assets/${item.icon}`)"
+                max-height="29"
+                max-width="29"
+              ></v-img>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
+    </v-row>
   </v-container>
 </template>
 <script>
 export default {
   name: "navbarHeader",
+  data() {
+    return {
+      items: [
+        { title: "PT", value: "pt_BR", icon: "flag-pt.svg" },
+        { title: "EN", value: "en_US", icon: "flag-en.svg" },
+      ],
+    };
+  },
   methods: {
     setDark() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      localStorage.setItem("theme", this.$vuetify.theme.dark);
+    },
+    setLocale(locale) {
+      this.$i18n.locale = locale;
+      localStorage.setItem("locale", locale);
     },
   },
   computed: {
@@ -37,6 +91,13 @@ export default {
       return icon;
     },
   },
+  mounted() {
+    this.$i18n.locale = localStorage.getItem("locale");
+    const theme = localStorage.getItem("theme");
+    if (theme !== null) {
+      this.$vuetify.theme.dark = JSON.parse(theme);
+    }
+  },
 };
 </script>
 <style scoped>
@@ -52,5 +113,10 @@ export default {
   position: absolute;
   top: 5px;
   right: 30px;
+}
+.text-nav3 {
+  position: absolute;
+  left: 30px;
+  top: 5px;
 }
 </style>
